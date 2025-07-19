@@ -120,7 +120,7 @@ From `gdb` this can be done using the `run` command:
 ```bash
 gdb ./vuln
 Reading symbols from vuln...
-(gdb) run $(python -c "print('\x41'*501)"
+(gdb) run $(python -c "print('\x41'*501)")
 [Inferior 1 (process 3508) exited normally]
 ```
 
@@ -162,6 +162,10 @@ Starting program: ./vuln $(python -c "print('\x41'*501)")
 Breakpoint 1, 0x080491ac in main (argc=2, argv=0xffffd0b4) at vuln.c:7
 7       }
 ```
+
+.Optional title
+[example]
+This is an example of an example block.
 
 Now by checking the registers with the `info registers` commands we can
 verify that the `ebx` address is being overwritten:
@@ -502,6 +506,16 @@ sh-5.1$
 
 And here we go! The buffer overflow was successfully exploited,
 resulting in obtaining access to a command shell.
+
+
+# Clean Up
+
+re-enable ASLR:
+
+```bash
+echo 2 > /proc/sys/kernel/randomize_va_space
+```
+
 
 ## [](#References "References")References 
 
