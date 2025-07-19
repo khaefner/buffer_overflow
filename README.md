@@ -154,8 +154,18 @@ Dump of assembler code for function main:
    0x080491ac <+54>:    leave
    0x080491ad <+55>:    ret
 End of assembler dump.
+```
+
+Now set a break point where the program leaves the main functon in the above example it is at location 
+`0x080491ac`
+
+```bash
 (gdb) break *0x080491ac
 Breakpoint 1 at 0x80491ac: file vuln.c, line 7.
+```
+Re-run your program with the following:
+
+```bash
 (gdb) run $(python -c "print('\x41'*501)")                                                                             
 Starting program: ./vuln $(python -c "print('\x41'*501)")
 
@@ -163,12 +173,17 @@ Breakpoint 1, 0x080491ac in main (argc=2, argv=0xffffd0b4) at vuln.c:7
 7       }
 ```
 
-.Optional title
-[example]
-This is an example of an example block.
+The above writes 501 `A chars` to memory
 
-Now by checking the registers with the `info registers` commands we can
-verify that the `ebx` address is being overwritten:
+---
+`Action:`  Take a screen shout of your main memory layout
+---
+
+Now by checking the registers with the `info registers` 
+Is the register being overwritten?  You should see '41'.
+Increase the number of `A` chars you are writting (remember \x41) 
+
+verify that the `ebx` address is being overwritten :
 
 ```bash
 (gdb) info registers
@@ -177,20 +192,14 @@ ebx            0xf7fa0041          -134610879
 [..]
 ```
 
-By inputting a 504 character long string, we overwrite the whole `ebx`
-register:
+Question: How many chars are needed to overwrite the whole `ebx`
+register?  (hint should look like this: `ebx            0x41414141`)
 
-```bash
-run $(python -c "print('\x41'*504)")                                                                             
-Starting program: ./vuln $(python -c "print('\x41'*504)")
+---
+`Action:`  Take a screen shout of your main memory layout
+---
 
-Breakpoint 1, 0x080491ac in main (argc=2, argv=0xffffd0b4) at vuln.c:7
-7       }
-(gdb) info registers
-[...]
-ebx            0x41414141          -1094795585
-[..]
-```
+
 
 We can also visualize what the stack looks like in memory from gdb with
 `x/12x $sp-20`. Let's decompose the command to understand how it works:
@@ -240,6 +249,10 @@ eip            0x44444444          0x44444444
 0xffffcfdc:     0x41414141      0x41414141      0x42424242      0x43434343
 0xffffcfec:     0x44444444      0x00000000
 ```
+
+---
+`Action:`  Take a screen shout of your memory layout
+---
 
 Our stack now looks like this:
 
