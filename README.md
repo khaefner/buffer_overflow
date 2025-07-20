@@ -535,6 +535,8 @@ process 6722 is executing new program: /usr/bin/bash
 [Thread debugging using libthread_db enabled]
 Using host libthread_db library "/usr/lib/libthread_db.so.1".
 sh-5.1$
+```
+
 And here we go! The buffer overflow was successfully exploited,
 resulting in obtaining access to a command shell.
 
@@ -547,12 +549,13 @@ Take a screen shot of the directory after it is run and hand in the source to yo
 You can (and are encouraged to) use AI to help generate the shellcode.
 
 
-#What to hand in
+# What to hand in
 
+1. PDF with screen shots.  Annotate the images and explain what is going on in each  (if you could not get everything to work hand in screenshot of what you tried and annotate what you did and what you think you might try differently)
+2. Zip file of the vuln.c code your shellcode.asm shell_loader.c the exploit.py file
 
 
 # Clean Up
-
 re-enable ASLR:
 
 ```bash
