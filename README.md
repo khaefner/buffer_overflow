@@ -41,7 +41,6 @@ For the learning purpose of our example, we are going to disable these
 protections and force a 32 bits compilation.
 
 ```bash
- sudo echo 0 > /proc/sys/kernel/randomize_va_space # disable ASLR
  gcc -m32 -g -mpreferred-stack-boundary=2 -fno-stack-protector -z execstack vuln.c -o vuln
  ```
 
@@ -555,12 +554,7 @@ You can (and are encouraged to) use AI to help generate the shellcode.
 2. Zip file of the vuln.c code your shellcode.asm shell_loader.c the exploit.py shellcode-evil.asm
 
 
-# Clean Up
-re-enable ASLR:
 
-```bash
-echo 2 > /proc/sys/kernel/randomize_va_space
-```
 
 
 ## [](#References "References")References 
