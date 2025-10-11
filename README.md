@@ -209,7 +209,7 @@ Question: How many chars are needed to overwrite the whole `ebx`
 register?  (hint should look like this: `ebx            0x41414141`)
 
 ---
-`Action:`  Take a screen shot of your main memory layout using the info registers 
+`Action:`  Take a screen shot of your main memory layout using the 'info registers' 
 ---
 
 
@@ -346,7 +346,7 @@ gs             0x63                99
 
 
 ---
-`Action:`  Take a screen shot of your memory layout
+`Action:`  Take a screen shot of your memory layout using the above commands.
 ---
 
 Our stack now looks like this:
@@ -609,14 +609,9 @@ $1 = (char (*)[500]) 0xffffce80
 ```
 
 ---
-`Action:`  Take a screen shot of your memory layout
+`Action:`  Take a screen shot of your Terminal output from the above commands
 ---
 
-
-
-
-![buffer overflow memory
-inspection](https://github.com/hg8/hg8.github.io/assets/9076747/a8b81bb7-2590-47e9-bc15-c2071f7d7f03)
 
 Let's now pick any memory address within the `x90` NOP sled area before
 the shellcode to be our return address. From the screenshot above we can
@@ -663,18 +658,16 @@ And here we go! The buffer overflow was successfully exploited,
 resulting in obtaining access to a command shell.
 
 
-# Part 2
+---
+`Action:`  Take a screen shot of exploit working
+---
 
-Modiy your shell code to create a file in the executable's directory called evil.txt
-Take a screen shot of the directory after it is run and hand in the source to your shellcode as a shellcode_evil.asm
-
-You can (and are encouraged to) use AI to help generate the shellcode.
 
 
 # What to hand in
 
 1. PDF with screen shots.  Annotate the images and explain what is going on in each  (if you could not get everything to work hand in screenshot of what you tried and annotate what you did and what you think you might try differently)
-2. Zip file of the vuln.c code your shellcode.asm shell_loader.c the exploit.py shellcode-evil.asm
+
 
 
 
