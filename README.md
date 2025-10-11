@@ -147,23 +147,37 @@ Let's now add a breakpoint in order to highlight how the EBX register
 got overwritten with an extra `x41` ('A'):
 
 ```bash
-(gdb) list main
-1	#include <stdio.h>
-2	#include <string.h>
-3	
-4	int main (int argc, char** argv) {
-5	  char buffer [500];
-6	  strcpy(buffer, argv[1]);
-7	  return 0;
-8	}
+(gdb) disassemble main
+Dump of assembler code for function main:
+   0x0000118d <+0>:	push   %ebp
+   0x0000118e <+1>:	mov    %esp,%ebp
+   0x00001190 <+3>:	push   %ebx
+   0x00001191 <+4>:	sub    $0x1f4,%esp
+   0x00001197 <+10>:	call   0x11c5 <__x86.get_pc_thunk.ax>
+   0x0000119c <+15>:	add    $0x2e58,%eax
+   0x000011a1 <+20>:	mov    0xc(%ebp),%edx
+   0x000011a4 <+23>:	add    $0x4,%edx
+   0x000011a7 <+26>:	mov    (%edx),%edx
+   0x000011a9 <+28>:	push   %edx
+   0x000011aa <+29>:	lea    -0x1f8(%ebp),%edx
+   0x000011b0 <+35>:	push   %edx
+   0x000011b1 <+36>:	mov    %eax,%ebx
+   0x000011b3 <+38>:	call   0x1040 <strcpy@plt>
+   0x000011b8 <+43>:	add    $0x8,%esp
+   0x000011bb <+46>:	mov    $0x0,%eax
+   0x000011c0 <+51>:	mov    -0x4(%ebp),%ebx
+   0x000011c3 <+54>:	leave
+   0x000011c4 <+55>:	ret
+End of assembler dump.
+
 ```
 
-Now set a break point where the program leaves the main functon in the above example it is at location 
+Now set a break point where the program leaves the main functon in the above example it is at location 0x000011c3
 
 
 ```bash
-(gdb) break 8
-Breakpoint 1 at 0x80491ac: file vuln.c, line 7.
+(gdb) break *0x000011c3
+Breakpoint 1 at 0x11c3: file vuln.c, line 8.
 ```
 Re-run your program with the following:
 
@@ -177,9 +191,6 @@ Breakpoint 1, 0x080491ac in main (argc=2, argv=0xffffd0b4) at vuln.c:7
 
 The above writes 501 `A chars` to memory
 
----
-`Action:`  Take a screen shot of your main memory layout
----
 
 Now by checking the registers with the `info registers` 
 Is the register being overwritten?  You should see '41'.
@@ -198,7 +209,7 @@ Question: How many chars are needed to overwrite the whole `ebx`
 register?  (hint should look like this: `ebx            0x41414141`)
 
 ---
-`Action:`  Take a screen shot of your main memory layout uing the info registers
+`Action:`  Take a screen shot of your main memory layout using the info registers 
 ---
 
 
