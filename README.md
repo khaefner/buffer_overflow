@@ -389,8 +389,7 @@ architecture and is commonly written in Assembly.
 
 You can easily find plenty on the internet. For our example we are going
 to use a very common and simple
-[shellcode](http://shell-storm.org/shellcode/files/shellcode-827.html){target="_blank"
-rel="noopener"} for x86 which executes a `/bin/sh` shell.
+[shellcode](http://shell-storm.org/shellcode/files/shellcode-827.html) for x86 which executes a `/bin/sh` shell.
 
 Here is a quick overview of this shellcode:
 
