@@ -469,10 +469,10 @@ Let's run it:
 ```bash
 gcc -m32 -z execstack shellcode-loader.c -o shellcode-loader
 [hg8@archbook ~]$ ./shellcode-loader
-sh-5.1$ 
+$ 
 ```
 
-All is good, let's now inject the shellcode into our vulnerable program.
+If you see a new shell (it will look different than your parrot shell) then all is good, let's now inject the shellcode into our vulnerable program.
 
 ## [](#Shellcode-Injection "Shellcode Injection")Shellcode Injection 
 
