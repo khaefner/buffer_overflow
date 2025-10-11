@@ -129,6 +129,12 @@ Nothing happens, it's normal since EBX is not a critical register in our
 example program.
 
 Increase the numbe of 'A's you are putting into the buffer.  
+
+
+---
+`Action:`  Answer this question with the number required to cause an illegal instruction.
+---
+
 How many accurances of 'A' characters do you have to increase to cause a 
 segmentation fault (Note: you may see a SIGILL, Illegal instruction..this is where the
 execution pointer is being overwritten add one more to make sure, you should see 
@@ -205,7 +211,7 @@ Question: How many chars are needed to overwrite the whole `ebx`
 register?  (hint should look like this: `ebx            0x41414141`)
 
 ---
-`Action:`  Take a screen shot of your main memory layout
+`Action:`  Take a screen shot of your main memory layout uing the info registers
 ---
 
 
