@@ -666,11 +666,31 @@ resulting in obtaining access to a command shell.
 
 # What to hand in
 
-1. PDF with screen shots.  Annotate the images and explain what is going on in each  (if you could not get everything to work hand in screenshot of what you tried and annotate what you did and what you think you might try differently)
+Submission Instructions
 
+Please submit a single PDF document containing the following items in order. For each screenshot, please include a brief caption explaining what the image shows and why it is significant to the lab.
 
+    Title Page: Your name, course number (CS456), and lab title.
 
+   - Initial EIP Overwrite:
 
+      -  The number of 'A' characters required to overwrite EIP and cause a segmentation fault.
+
+      -  A screenshot of the info registers command in GDB showing EIP overwritten with 0x41414141.
+
+   - Full Register Overwrite: A screenshot showing the output of info registers and x/14x $sp+460 after running the payload with 'B's, 'C's, and 'D's. The EIP, EBP, and EBX registers should be clearly overwritten.
+
+   - Final Exploit Code: The complete, final source code for your exploit.py script.
+
+   - Successful Exploitation: A screenshot of your terminal after running the final exploit. It must show the exploit being launched from your command line and the resulting `$` shell prompt, proving you gained code execution.
+
+   - Answers to Questions: Your complete answers to the three questions below.
+
+ 1. The Role of Security Protections: This lab required us to disable several modern security protections using gcc flags like -fno-stack-protector and -z execstack. Choose one of these two protections and explain in your own words (1) what it does and (2) how it would have prevented the specific exploit you just performed.
+
+2. The NOP Sled: Explain the purpose of the NOP sled. What problem does it solve for the attacker? What is a potential disadvantage of using a very large NOP sled in an exploit?
+
+3. Secure Coding: The vulnerability in vuln.c was caused by the use of the strcpy() function. Identify a safer C library function that could be used to copy argv[1] into the buffer and explain why it is safer than strcpy(). Rewrite the strcpy line in vuln.c to use this safer function correctly.
 
 
 ## [](#References "References")References 
