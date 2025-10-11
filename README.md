@@ -120,7 +120,7 @@ From `gdb` this can be done using the `run` command:
 ```bash
 gdb ./vuln
 Reading symbols from vuln...
-(gdb) run $(python -c "print('\x41'*501)")
+(gdb) run $(python3 -c "print('\x41'*501)")
 [Inferior 1 (process 3508) exited normally]
 ```
 
