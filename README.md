@@ -147,35 +147,22 @@ Let's now add a breakpoint in order to highlight how the EBX register
 got overwritten with an extra `x41` ('A'):
 
 ```bash
-(gdb) disassemble main
-Dump of assembler code for function main:
-   0x08049176 <+0>:     push   ebp
-   0x08049177 <+1>:     mov    ebp,esp
-   0x08049179 <+3>:     push   ebx
-   0x0804917a <+4>:     sub    esp,0x1f4
-   0x08049180 <+10>:    call   0x80491ae <__x86.get_pc_thunk.ax>
-   0x08049185 <+15>:    add    eax,0x2053
-   0x0804918a <+20>:    mov    edx,DWORD PTR [ebp+0xc]
-   0x0804918d <+23>:    add    edx,0x4
-   0x08049190 <+26>:    mov    edx,DWORD PTR [edx]
-   0x08049192 <+28>:    push   edx
-   0x08049193 <+29>:    lea    edx,[ebp-0x1f8]
-   0x08049199 <+35>:    push   edx
-   0x0804919a <+36>:    mov    ebx,eax
-   0x0804919c <+38>:    call   0x8049050 <strcpy@plt>
-   0x080491a1 <+43>:    add    esp,0x8
-   0x080491a4 <+46>:    mov    eax,0x0
-   0x080491a9 <+51>:    mov    ebx,DWORD PTR [ebp-0x4]
-   0x080491ac <+54>:    leave
-   0x080491ad <+55>:    ret
-End of assembler dump.
+(gdb) list main
+1	#include <stdio.h>
+2	#include <string.h>
+3	
+4	int main (int argc, char** argv) {
+5	  char buffer [500];
+6	  strcpy(buffer, argv[1]);
+7	  return 0;
+8	}
 ```
 
 Now set a break point where the program leaves the main functon in the above example it is at location 
-`0x080491ac`
+
 
 ```bash
-(gdb) break *0x080491ac
+(gdb) break 8
 Breakpoint 1 at 0x80491ac: file vuln.c, line 7.
 ```
 Re-run your program with the following:
