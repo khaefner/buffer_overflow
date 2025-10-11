@@ -128,6 +128,15 @@ Reading symbols from vuln...
 Nothing happens, it's normal since EBX is not a critical register in our
 example program.
 
+Increase the numbe of 'A's you are putting into the buffer.  
+How many accurances of 'A' characters do you have to increase to cause a 
+segmentation fault (Note: you may see a SIGILL, Illegal instruction..this is where the
+execution pointer is being overwritten add one more to make sure, you should see 
+Segmentation fault) ?   
+
+_Record this number_
+
+
 Let's now add a breakpoint in order to highlight how the EBX register
 got overwritten with an extra `x41` ('A'):
 
