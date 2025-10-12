@@ -15,6 +15,10 @@ sudo apt update
 
 sudo apt install libc6-dev-i386
 
+git clone https://github.com/khaefner/buffer_overflow.git
+
+cd buffer_overflow
+
 # Background
 
 As previously stated in the introduction, today's memory layout of a
@@ -683,7 +687,7 @@ Please submit a single PDF document containing the following items in order. For
 
    - Full Register Overwrite: A screenshot showing the output of info registers and x/14x $sp+460 after running the payload with 'B's, 'C's, and 'D's. The EIP, EBP, and EBX registers should be clearly overwritten.
 
-   - Test exploit code: A scren shot of the terminal shoing the eploit-test.py being run with the print of the memory running in the buffer
+   - Test exploit code: A screen shot of the terminal showing the exploit-test.py being run with the print of the memory running in the buffer
 
    - Final Exploit Code: The complete, final source code for your exploit.py script.
 
