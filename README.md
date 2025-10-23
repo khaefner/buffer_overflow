@@ -183,6 +183,21 @@ Now set a break point where the program leaves the main functon in the above exa
 (gdb) break *0x000011c3
 Breakpoint 1 at 0x11c3: file vuln.c, line 8.
 ```
+Update:  If you are getting cannot access memory at address xxxxxxxx
+
+try this:
+```bash
+(gdb) break *main+51
+```
+Then you will likely have to step through the code using.
+
+```bash
+(gdb) si
+Breakpoint 2, main (argc=2, argv=0xffffd124) at vuln.c:8
+8	}
+```
+
+Now:
 Re-run your program with the following:
 
 ```bash
