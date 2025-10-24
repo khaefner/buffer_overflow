@@ -543,7 +543,7 @@ it's important to use `bytes` type.
 In addition, since we are working on x86, the hexadecimal value for NOP
 instructions is `0x90`.
 
-Save the following as exploit.py
+Save the following as exploit-test.py
 
 ```bash
 import sys
